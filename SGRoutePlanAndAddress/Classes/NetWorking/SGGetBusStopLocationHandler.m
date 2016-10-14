@@ -59,10 +59,11 @@ typedef void(^Failed)(NSError  *_Nullable error);
  *  @param starStop     起点站点
  *  @param endStop      终点站点
  *  @param travelsModel 公交路线实体
+ *  @param url          获取公交路线途径站点经纬度服务URL(ArcGIS 服务)
  *  @param success      成功block
  *  @param failed       失败block
  */
--(void)busStopLocation:(NSString *_Nonnull)starStop andEndStop:(NSString *_Nonnull)endStop andBusTravles:(BusTravelsModel *_Nullable) travelsModel succes:
+-(void)busStopLocation:(NSString *_Nonnull)starStop andEndStop:(NSString *_Nonnull)endStop andBusTravles:(BusTravelsModel *_Nullable) travelsModel andURL:(NSString *_Nullable)url succes:
 (nonnull void (^)( NSArray<AGSGraphic *> *_Nullable graphics))success failed:
 (nonnull void(^)(NSError *_Nullable error))failed{
     
@@ -71,7 +72,7 @@ typedef void(^Failed)(NSError  *_Nullable error);
 
 
 
-    NSString *url = @"http://59.37.169.186:6080/arcgis/rest/services/hsgongjiao/MapServer/0";
+//    NSString *url = @"http://59.37.169.186:6080/arcgis/rest/services/hsgongjiao/MapServer/0";
     
     if (self.querytask) {
         

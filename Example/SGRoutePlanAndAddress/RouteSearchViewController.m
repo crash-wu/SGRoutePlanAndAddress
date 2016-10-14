@@ -113,14 +113,16 @@
     __weak typeof(&*self) weak = self;
 
     [SVProgressHUD showWithStatus:@"正在搜索数据..."];
-    [[SGRouteServiceHandler sharedInstance ] changShaRouteSearch:@[startPoint,stopPoint] success:^(AGSRouteResult * _Nullable resut) {
-        
 
+    
+    NSString *url = @"http://www.dzmap.cn/OneMapServer/rest/services/HUNAN_ROAD/NAServer/road_analyst";
+    [[SGRouteServiceHandler sharedInstance] changShaRouteSearch:@[startPoint,stopPoint] andURL:url success:^(AGSRouteResult * _Nullable resut) {
+        
         [SVProgressHUD dismiss];
         [weak.navigationController pushViewController:[[CarRouteResultViewController alloc] initWithRouteResult:resut andStartAddress:@"起点" andStopAddress:@"终点"] animated:true]  ;
         
     } fail:^(NSError * _Nullable error) {
-        [SVProgressHUD showErrorWithStatus:@"搜索不到该段线路信息!"];
+        
     }];
 }
 

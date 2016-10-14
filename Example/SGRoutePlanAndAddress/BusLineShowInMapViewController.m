@@ -196,27 +196,48 @@
     }
     
     //获取公交路线线路
-    [self.busLineHandler busStopLine:starStop andEndStop:endStop andBusTravles:travelModel succes:^(NSArray<AGSGraphic *> * _Nullable graphics) {
+    NSString *lineUrl = @"http://59.37.169.186:6080/arcgis/rest/services/hsgongjiao/MapServer/1";
+    NSString *stopUrl = @"http://59.37.169.186:6080/arcgis/rest/services/hsgongjiao/MapServer/0";
+    
+    [self.busLineHandler busStopLine:starStop andEndStop:endStop andBusTravles:travelModel andURL:lineUrl succes:^(NSArray<AGSGraphic *> * _Nullable graphics) {
         
         [weak showBusLineInMapView:graphics];
         
-        //获取公交站点位置
-        [weak.busStopHandler busStopLocation:self.starStop andEndStop:self.endStop andBusTravles:travelModel succes:^(NSArray<AGSGraphic *> * _Nullable graphics) {
-
+        [weak.busStopHandler busStopLocation:starStop andEndStop:endStop andBusTravles:travelModel andURL:stopUrl succes:^(NSArray<AGSGraphic *> * _Nullable graphics) {
+            
+            //获取公交站点位置
             [SVProgressHUD dismiss];
             [weak showBusStopInMapView:graphics];
             
         } failed:^(NSError * _Nullable error) {
-
-            [SVProgressHUD showErrorWithStatus:@"获取公交路线数据失败!"];
-            
+                [SVProgressHUD showErrorWithStatus:@"获取公交路线数据失败!"];
         }];
         
-        
     } failed:^(NSError * _Nullable error) {
-
+        
         [SVProgressHUD showErrorWithStatus:@"获取公交路线数据失败!"];
     }];
+//    [self.busLineHandler busStopLine:starStop andEndStop:endStop andBusTravles:travelModel succes:^(NSArray<AGSGraphic *> * _Nullable graphics) {
+//        
+//        [weak showBusLineInMapView:graphics];
+//        
+//        //获取公交站点位置
+//        [weak.busStopHandler busStopLocation:self.starStop andEndStop:self.endStop andBusTravles:travelModel succes:^(NSArray<AGSGraphic *> * _Nullable graphics) {
+//
+//            [SVProgressHUD dismiss];
+//            [weak showBusStopInMapView:graphics];
+//            
+//        } failed:^(NSError * _Nullable error) {
+//
+//            [SVProgressHUD showErrorWithStatus:@"获取公交路线数据失败!"];
+//            
+//        }];
+//        
+//        
+//    } failed:^(NSError * _Nullable error) {
+//
+//        [SVProgressHUD showErrorWithStatus:@"获取公交路线数据失败!"];
+//    }];
     
 }
 

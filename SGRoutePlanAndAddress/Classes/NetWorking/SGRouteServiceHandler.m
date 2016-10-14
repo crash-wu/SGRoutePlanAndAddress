@@ -46,6 +46,14 @@ typedef void(^Fail)(NSError *_Nullable error);
 @property(nonatomic,strong,nullable) Success success;
 
 @property(nonatomic,strong,nullable) Fail fail;
+
+/**
+ *  @author crash         crash_wu@163.com   , 16-10-14 17:10:48
+ *
+ *  @brief  请求服务url
+ */
+@property(nonatomic,strong,nullable) NSString *url;
+
 @end
 
 @implementation SGRouteServiceHandler
@@ -91,8 +99,8 @@ typedef void(^Fail)(NSError *_Nullable error);
     
     if (_routeTask == nil) {
         
-        NSURL *routeTaskUrl = [NSURL URLWithString:@"http://www.dzmap.cn/OneMapServer/rest/services/HUNAN_ROAD/NAServer/road_analyst"];
-
+      //  NSURL *routeTaskUrl = [NSURL URLWithString:@"http://www.dzmap.cn/OneMapServer/rest/services/HUNAN_ROAD/NAServer/road_analyst"];
+       NSURL *routeTaskUrl = [NSURL URLWithString:self.url];
         self.routeTask = [AGSRouteTask routeTaskWithURL:routeTaskUrl];
         self.routeTask.delegate = self;
 
@@ -148,10 +156,13 @@ typedef void(^Fail)(NSError *_Nullable error);
  *  @brief  驾车路线规划
  *
  *  @param points  路线经过点
+ *  @param url     驾车路线规划请求服务(ArcGIS 服务)
  *  @param success 请求成功
  *  @param fail    请求失败
  */
--(void)changShaRouteSearch:(NSArray<AGSPoint *> *_Nonnull)points success:(nullable void(^)(AGSRouteResult *_Nullable resut))success fail:(nullable void(^) (NSError *_Nullable error) )fail{
+-(void)changShaRouteSearch:(NSArray<AGSPoint *> *_Nonnull)points andURL:(NSString *_Nullable)url success:(nullable void(^)(AGSRouteResult *_Nullable resut))success fail:(nullable void(^) (NSError *_Nullable error) )fail{
+    
+    self.url = url;
     
     [self.stops removeAllObjects];
     

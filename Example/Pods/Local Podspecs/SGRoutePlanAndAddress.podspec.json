@@ -1,19 +1,19 @@
 {
   "name": "SGRoutePlanAndAddress",
-  "version": "0.1.0",
-  "summary": "A short description of SGRoutePlanAndAddress.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/SGRoutePlanAndAddress",
+  "version": "0.0.1",
+  "summary": "数码地名地址搜索，周边搜索，公交站点搜索，公交路线搜索，公交站点坐标搜索，公交路线坐标搜索，驾车路线搜索",
+  "description": "数码地名地址搜索，周边搜索，公交站点搜索，公交路线搜索，公交站点坐标搜索，公交路线坐标搜索，驾车路线搜索",
+  "homepage": "https://github.com/crash-wu/SGRoutePlanAndAddress",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "吴小星": "xiaoxing.wu@southgis.com"
+    "吴小星": "crash_wu@southgis.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/SGRoutePlanAndAddress.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/crash-wu/SGRoutePlanAndAddress.git",
+    "tag": "0.0.1"
   },
   "platforms": {
     "ios": "8.0"

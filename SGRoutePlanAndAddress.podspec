@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SGRoutePlanAndAddress'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of SGRoutePlanAndAddress.'
+  s.version          = '0.0.1'
+  s.summary          = ' 数码地名地址搜索，周边搜索，公交站点搜索，公交路线搜索，公交站点坐标搜索，公交路线坐标搜索，驾车路线搜索'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,16 +17,15 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  s.description      = ' 数码地名地址搜索，周边搜索，公交站点搜索，公交路线搜索，公交站点坐标搜索，公交路线坐标搜索，驾车路线搜索'
 
-  s.homepage         = 'https://github.com/<GITHUB_USERNAME>/SGRoutePlanAndAddress'
+
+  s.homepage         = 'https://github.com/crash-wu/SGRoutePlanAndAddress'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { '吴小星' => 'xiaoxing.wu@southgis.com' }
-  s.source           = { :git => 'https://github.com/<GITHUB_USERNAME>/SGRoutePlanAndAddress.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { '吴小星' => 'crash_wu@southgis.com' }
+  s.source           = { :git => 'https://github.com/crash-wu/SGRoutePlanAndAddress.git', :tag => s.version.to_s }
+
 
   s.ios.deployment_target = '8.0'
 

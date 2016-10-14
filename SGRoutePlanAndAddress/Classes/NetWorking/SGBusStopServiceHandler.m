@@ -8,6 +8,17 @@
 
 #import "SGBusStopServiceHandler.h"
 
+@interface SGBusStopServiceHandler ()
+
+/**
+ *  @author crash         crash_wu@163.com   , 16-10-14 17:10:48
+ *
+ *  @brief  请求服务url
+ */
+@property(nonatomic,strong,nullable) NSString *url;
+
+@end
+
 @implementation SGBusStopServiceHandler
 
 /**
@@ -53,8 +64,8 @@
  *  @return 返回纠错请求地址
  */
 -(NSString *)requestURL{
-    
-    return @"http://59.37.169.186:7080/busquery/busStopQueryServlet";
+    return self.url;
+   // return @"http://59.37.169.186:7080/busquery/busStopQueryServlet";
 
 }
 
@@ -76,14 +87,15 @@
  *  @brief  查询公交站点名称
  *
  *  @param stopName 公交站点名称
+ *  @param url      公交站点查询URL
  *  @param success  查询成功block
  *  @param fail     查询失败block
  */
--(void)busStopService:(NSString *_Nullable)stopName success:(nonnull void (^)(NSArray<NSString *> *_Nullable stopNames))success fail:(nonnull void(^)(NSError *_Nullable error))fail{
+-(void)busStopService:(NSString *_Nullable)stopName andURL:(NSString *_Nullable)url success:(nonnull void (^)(NSArray<NSString *> *_Nullable stopNames))success fail:(nonnull void(^)(NSError *_Nullable error))fail{
 
     [SVProgressHUD showWithStatus:@"正在获取公交站点数据..."];
     self.stopName = stopName;
-    
+    self.url = url;
     [self startWithCompletionSuccess:^(__kindof SGSBaseRequest * _Nonnull request) {
         
         NSString *stopString = [self.responseString stringByReplacingOccurrencesOfString:@"[" withString:@""];

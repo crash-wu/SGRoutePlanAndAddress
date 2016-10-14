@@ -18,6 +18,13 @@
  */
 @property(nonatomic,nullable,strong) SGSurroundAddressSearchModel *searchModel;
 
+/**
+ *  @author crash         crash_wu@163.com   , 16-10-14 17:10:48
+ *
+ *  @brief  请求服务url
+ */
+@property(nonatomic,strong,nullable) NSString *url;
+
 @end
 
 @implementation SGSurroundAddressServiceHandler
@@ -71,7 +78,8 @@
  */
 -(NSString *)requestURL{
 
-    return @"http://192.168.10.72:8088/cloud_place/gazetteer/intersects/point.do";
+    return self.url;
+    //return @"http://192.168.10.72:8088/cloud_place/gazetteer/intersects/point.do";
 }
 
 -(id)requestParameters{
@@ -131,11 +139,13 @@
  *  @brief  地名地址查询
  *
  *  @param searchModel 周边查询实体
+ *  @param url         请求URL
  *  @param success     搜索成功block
  *  @param fail        搜索失败block
  */
--(void)changShaSurroundAddressService:(SGSurroundAddressSearchModel *_Nullable)searchModel success:(nonnull void(^)(NSArray<SGAddressModel *> *_Nullable models))success fail:(nonnull void (^)(NSError *_Nullable error))fail{
+-(void)changShaSurroundAddressService:(SGSurroundAddressSearchModel *_Nullable)searchModel andURL:(NSString *_Nullable) url success:(nonnull void(^)(NSArray<SGAddressModel *> *_Nullable models))success fail:(nonnull void (^)(NSError *_Nullable error))fail{
 
+    self.url = url;
     [SVProgressHUD showWithStatus:@"正在搜索数据..."];
     self.searchModel = searchModel;
     [self startWithCompletionSuccess:^(__kindof SGSBaseRequest * _Nonnull request) {

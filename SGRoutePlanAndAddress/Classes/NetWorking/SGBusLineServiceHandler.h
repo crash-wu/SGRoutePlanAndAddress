@@ -51,9 +51,14 @@
  *
  *  @param start   起点地址
  *  @param end     终点地址
+ *  @param url     公交路线搜索URL
  *  @param success 搜索成功block
  *  @param fail    搜索失败block
  */
--(void)busLineService:(NSString *_Nullable) start andEnd:(NSString *_Nullable) end success:(nonnull void(^)(NSArray<BusTravelsModel *> *_Nullable busLines))success fail:(nonnull void(^)(NSError *_Nullable error))fail;
+-(void)busLineService:(NSString *_Nullable) start
+               andEnd:(NSString *_Nullable) end
+               andURL:(NSString *_Nullable)url
+              success:(nonnull void(^)(NSArray<BusTravelsModel *> *_Nullable busLines))success
+                 fail:(nonnull void(^)(NSError *_Nullable error))fail;
 
 @end

@@ -40,9 +40,13 @@
  *  @brief  查询公交站点名称
  *
  *  @param stopName 公交站点名称
+ *  @param url      公交站点查询URL
  *  @param success  查询成功block
  *  @param fail     查询失败block
  */
--(void)busStopService:(NSString *_Nullable)stopName success:(nonnull void (^)(NSArray<NSString *> *_Nullable stopNames))success fail:(nonnull void(^)(NSError *_Nullable error))fail;
+-(void)busStopService:(NSString *_Nullable)stopName
+               andURL:(NSString *_Nullable)url
+              success:(nonnull void (^)(NSArray<NSString *> *_Nullable stopNames))success
+                 fail:(nonnull void(^)(NSError *_Nullable error))fail;
 
 @end

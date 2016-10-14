@@ -27,10 +27,14 @@
  *  @brief  地名地址查询
  *
  *  @param searchModel 查询实体
+ *  @param url         请求服务URL
  *  @param success     搜索成功block
  *  @param fail        搜索失败block
  */
--(void)changShaAddressService:(SGAddressSearchModel *_Nullable)searchModel success:(nonnull void(^)(NSArray<SGAddressModel *> *_Nullable models))success fail:(nonnull void (^)(NSError *_Nullable error))fail;
+-(void)changShaAddressService:(SGAddressSearchModel *_Nullable)searchModel
+   andUrl:(NSString *_Nullable)url
+  success:(nonnull void(^)(NSArray<SGAddressModel *> *_Nullable models))success
+     fail:(nonnull void (^)(NSError *_Nullable error))fail;
 
 
 /**

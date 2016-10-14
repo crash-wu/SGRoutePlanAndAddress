@@ -36,9 +36,13 @@
  *  @brief  驾车路线规划
  *
  *  @param points  路线经过点
+ *  @param url     驾车路线规划请求服务(ArcGIS 服务)
  *  @param success 请求成功
  *  @param fail    请求失败
  */
--(void)changShaRouteSearch:(NSArray<AGSPoint *> *_Nonnull)points success:(nullable void(^)(AGSRouteResult *_Nullable resut))success fail:(nullable void(^) (NSError *_Nullable error) )fail;
+-(void)changShaRouteSearch:(NSArray<AGSPoint *> *_Nonnull)points
+                    andURL:(NSString *_Nullable)url
+                    success:(nullable void(^)(AGSRouteResult *_Nullable resut))success
+                    fail:(nullable void(^) (NSError *_Nullable error) )fail;
 
 @end

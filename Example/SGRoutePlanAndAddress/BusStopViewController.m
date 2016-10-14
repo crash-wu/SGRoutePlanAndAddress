@@ -146,7 +146,11 @@
         self.busStopPresentable.busStopDelegate = self;
     }
     
-    [[SGBusStopServiceHandler sharedInstance] busStopService:stopName success:^(NSArray<NSString *> * _Nullable stopNames) {
+
+
+    NSString *url = @"http://59.37.169.186:7080/busquery/busStopQueryServlet";
+    [[SGBusStopServiceHandler sharedInstance]busStopService:stopName andURL:url success:^(NSArray<NSString *> * _Nullable stopNames) {
+        
         weak.tableView.hidden = false;
         [weak.busStopPresentable rendBusStopData:stopNames];
     } fail:^(NSError * _Nullable error) {
@@ -185,7 +189,8 @@
     
     __weak typeof(&*self) weak = self;
     //公交
-    [[SGBusLineServiceHandler sharedInstance] busLineService:starStop andEnd:endStop success:^(NSArray<BusTravelsModel *> * _Nullable busLines) {
+    NSString *url = @"http://192.168.10.72:8086/busquery/busTransferServlet";
+    [[SGBusLineServiceHandler sharedInstance]busLineService:starStop andEnd:endStop andURL:url success:^(NSArray<BusTravelsModel *> * _Nullable busLines) {
         
         if (busLines.count > 0) {
             

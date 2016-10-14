@@ -8,6 +8,17 @@
 
 #import "SGBusLineServiceHandler.h"
 
+@interface SGBusLineServiceHandler ()
+
+/**
+ *  @author crash         crash_wu@163.com   , 16-10-14 17:10:48
+ *
+ *  @brief  请求服务url
+ */
+@property(nonatomic,strong,nullable) NSString *url;
+
+@end
+
 @implementation SGBusLineServiceHandler
 
 
@@ -64,7 +75,8 @@
  */
 -(NSString *)requestURL{
 
-    return @"http://192.168.10.72:8086/busquery/busTransferServlet";
+    return self.url;
+    //return @"http://192.168.10.72:8086/busquery/busTransferServlet";
 }
 
 -(id)requestParameters{
@@ -98,11 +110,13 @@
  *
  *  @param start   起点地址
  *  @param end     终点地址
+ *  @param url     公交路线搜索URL
  *  @param success 搜索成功block
  *  @param fail    搜索失败block
  */
--(void)busLineService:(NSString *_Nullable) start andEnd:(NSString *_Nullable) end success:(nonnull void(^)(NSArray<BusTravelsModel *> *_Nullable busLines))success fail:(nonnull void(^)(NSError *_Nullable error))fail{
+-(void)busLineService:(NSString *_Nullable) start andEnd:(NSString *_Nullable) end andURL:(NSString *_Nullable)url success:(nonnull void(^)(NSArray<BusTravelsModel *> *_Nullable busLines))success fail:(nonnull void(^)(NSError *_Nullable error))fail{
 
+    self.url = url;
     [SVProgressHUD showWithStatus:@"正在获取公交信息..."];
     self.start = start;
     self.end = end;
