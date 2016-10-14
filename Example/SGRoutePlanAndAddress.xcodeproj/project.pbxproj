@@ -48,6 +48,7 @@
 		9815B5EA1DB0D8C80071B160 /* jiache_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9815B5E41DB0D8C80071B160 /* jiache_icon@2x.png */; };
 		9815B5EB1DB0D8C80071B160 /* jiache_start.png in Resources */ = {isa = PBXBuildFile; fileRef = 9815B5E51DB0D8C80071B160 /* jiache_start.png */; };
 		9815B5EC1DB0D8C80071B160 /* jiache_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9815B5E61DB0D8C80071B160 /* jiache_start@2x.png */; };
+		9815B5EE1DB0E7A90071B160 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9815B5ED1DB0E7A90071B160 /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +126,7 @@
 		9815B5E41DB0D8C80071B160 /* jiache_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "jiache_icon@2x.png"; sourceTree = "<group>"; };
 		9815B5E51DB0D8C80071B160 /* jiache_start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jiache_start.png; sourceTree = "<group>"; };
 		9815B5E61DB0D8C80071B160 /* jiache_start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "jiache_start@2x.png"; sourceTree = "<group>"; };
+		9815B5ED1DB0E7A90071B160 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		9D8B136F69CD22F525D704CE /* Pods-SGRoutePlanAndAddress_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SGRoutePlanAndAddress_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SGRoutePlanAndAddress_Example/Pods-SGRoutePlanAndAddress_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		A11E8DA6422399C158E57618 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		ADE8A3878D6C8D1E99F8A141 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				6003F594195388D20070C39A /* Supporting Files */,
 				9815B5901DB0B57B0071B160 /* BusStopViewController.h */,
 				9815B5911DB0B57B0071B160 /* BusStopViewController.m */,
+				9815B5ED1DB0E7A90071B160 /* Launch Screen.storyboard */,
 			);
 			name = "Example for SGRoutePlanAndAddress";
 			path = SGRoutePlanAndAddress;
@@ -426,6 +429,7 @@
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 				9815B5E71DB0D8C80071B160 /* jiache_end.png in Resources */,
 				9815B5C41DB0C8F60071B160 /* end_popo@2x.png in Resources */,
+				9815B5EE1DB0E7A90071B160 /* Launch Screen.storyboard in Resources */,
 				9815B5EA1DB0D8C80071B160 /* jiache_icon@2x.png in Resources */,
 				9815B5E81DB0D8C80071B160 /* jiache_end@2x.png in Resources */,
 				9815B5C81DB0C8FD0071B160 /* start_popo.png in Resources */,
@@ -682,7 +686,6 @@
 			baseConfigurationReference = 9D8B136F69CD22F525D704CE /* Pods-SGRoutePlanAndAddress_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SGRoutePlanAndAddress/SGRoutePlanAndAddress-Prefix.pch";
 				INFOPLIST_FILE = "SGRoutePlanAndAddress/SGRoutePlanAndAddress-Info.plist";
@@ -699,7 +702,6 @@
 			baseConfigurationReference = 8AB4C0F56C0C90AB5FD02598 /* Pods-SGRoutePlanAndAddress_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SGRoutePlanAndAddress/SGRoutePlanAndAddress-Prefix.pch";
 				INFOPLIST_FILE = "SGRoutePlanAndAddress/SGRoutePlanAndAddress-Info.plist";
