@@ -1,11 +1,9 @@
-use_frameworks!
+#use_frameworks!
 
 target 'SGRoutePlanAndAddress_Example' do
   pod 'SGRoutePlanAndAddress', :path => '../'
+  pod 'Masonry'
+  pod 'SGTileLayer','~> 0.0.4'
 
-  target 'SGRoutePlanAndAddress_Tests' do
-    inherit! :search_paths
 
-    
-  end
 end

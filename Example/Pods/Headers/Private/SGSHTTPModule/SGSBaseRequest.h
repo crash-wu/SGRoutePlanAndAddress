@@ -1,0 +1,1 @@
+../../../SGSHTTPModule/SGSHTTPModule/Classes/SGSBaseRequest.h

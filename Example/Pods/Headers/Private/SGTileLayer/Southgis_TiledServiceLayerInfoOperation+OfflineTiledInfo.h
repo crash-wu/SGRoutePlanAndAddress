@@ -1,0 +1,1 @@
+../../../SGTileLayer/SGTileLayer/Classes/CustomTile/Southgis_TiledServiceLayerInfoOperation+OfflineTiledInfo.h

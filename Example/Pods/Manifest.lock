@@ -1,0 +1,48 @@
+PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - Masonry (1.0.2)
+  - SGRoutePlanAndAddress (0.1.0):
+    - SGSHTTPModule
+    - SVProgressHUD
+    - YYModel
+  - SGSHTTPModule (0.4.1):
+    - AFNetworking (~> 3.1.0)
+  - SGTileLayer (0.0.4)
+  - SVProgressHUD (2.0.3)
+  - YYModel (1.0.4)
+
+DEPENDENCIES:
+  - Masonry
+  - SGRoutePlanAndAddress (from `../`)
+  - SGTileLayer (~> 0.0.4)
+
+EXTERNAL SOURCES:
+  SGRoutePlanAndAddress:
+    :path: ../
+
+SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
+  SGRoutePlanAndAddress: ee64bc35652e71e9d2b92ac85ec0118ce11e45b7
+  SGSHTTPModule: d3df3056c464f43a778cfcf0ec74c12dda7d5223
+  SGTileLayer: 13d2b0b0af10b3b7671699292133fb481d3ce4eb
+  SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
+
+PODFILE CHECKSUM: f48b0ded1c6bb159987f0063eedcd72cffa06749
+
+COCOAPODS: 1.0.1

@@ -1,0 +1,11 @@
+CLANG_ENABLE_MODULES = YES
+ENABLE_BITCODE = NO
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(HOME)/Library/SDKs/ArcGIS/iOS
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/Masonry" "${PODS_ROOT}/Headers/Public/SGRoutePlanAndAddress" "${PODS_ROOT}/Headers/Public/SGSHTTPModule" "${PODS_ROOT}/Headers/Public/SGTileLayer" "${PODS_ROOT}/Headers/Public/SVProgressHUD" "${PODS_ROOT}/Headers/Public/YYModel"
+LIBRARY_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/AFNetworking" "$PODS_CONFIGURATION_BUILD_DIR/Masonry" "$PODS_CONFIGURATION_BUILD_DIR/SGRoutePlanAndAddress" "$PODS_CONFIGURATION_BUILD_DIR/SGSHTTPModule" "$PODS_CONFIGURATION_BUILD_DIR/SGTileLayer" "$PODS_CONFIGURATION_BUILD_DIR/SVProgressHUD" "$PODS_CONFIGURATION_BUILD_DIR/YYModel"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/Masonry" -isystem "${PODS_ROOT}/Headers/Public/SGRoutePlanAndAddress" -isystem "${PODS_ROOT}/Headers/Public/SGSHTTPModule" -isystem "${PODS_ROOT}/Headers/Public/SGTileLayer" -isystem "${PODS_ROOT}/Headers/Public/SVProgressHUD" -isystem "${PODS_ROOT}/Headers/Public/YYModel"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"AFNetworking" -l"Masonry" -l"ObjC" -l"SGRoutePlanAndAddress" -l"SGSHTTPModule" -l"SGTileLayer" -l"SVProgressHUD" -l"YYModel" -l"c++" -framework "ArcGIS" -framework "CoreFoundation" -framework "CoreGraphics" -framework "Foundation" -framework "MobileCoreServices" -framework "QuartzCore" -framework "Security" -framework "SystemConfiguration" -framework "UIKit"
+PODS_BUILD_DIR = $BUILD_DIR
+PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_ROOT = ${SRCROOT}/Pods
