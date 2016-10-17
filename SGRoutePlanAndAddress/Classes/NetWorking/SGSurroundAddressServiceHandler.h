@@ -16,7 +16,7 @@
 /**
  *  @author crash         crash_wu@163.com   , 16-10-09 14:10:30
  *
- *  @brief  长沙地名地址周边查询
+ *  @brief  地名地址周边查询
  */
 @interface SGSurroundAddressServiceHandler : SGSBaseRequest
 
