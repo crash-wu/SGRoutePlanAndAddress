@@ -1,0 +1,1 @@
+../../../SGTileLayer/SGTileLayer/Classes/GDTile/SGGDLayerInfoDelegate.h

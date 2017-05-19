@@ -6,14 +6,13 @@
  @author Created by Lee on 16/8/15.
  
  @copyright 2016年 SouthGIS. All rights reserved.
- 
  */
 
 #import <Foundation/Foundation.h>
 
-@class SGSBaseRequest;
-
 NS_ASSUME_NONNULL_BEGIN
+
+@class SGSBaseRequest;
 
 /*!
  *  @protocol SGSRequestDelegate

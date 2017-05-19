@@ -31,6 +31,7 @@ typedef void(^ProgressBlock)(NSProgress *);
 
 /// 断点数据管理类，仅内部使用
 @interface p_ResumeDataManager : NSObject
+
 +(instancetype)sharedInstance;
 
 /// 获取断点数据
@@ -42,6 +43,7 @@ typedef void(^ProgressBlock)(NSProgress *);
 /// 清除所有的断点数据
 - (void)clearAllResumeDataWithCompletionHandler:(void (^)(BOOL))handler;
 @end
+
 
 @implementation p_ResumeDataManager {
     dispatch_queue_t _ioQueue;
@@ -201,6 +203,17 @@ typedef void(^ProgressBlock)(NSProgress *);
 
 
 #pragma mark - Public
+
++ (AFURLSessionManager *)defaultSessionManager {
+    static AFURLSessionManager *manager;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    });
+    
+    return manager;
+}
 
 // 添加请求并执行
 - (void)executeRequest:(SGSBaseRequest *)request {
@@ -392,6 +405,8 @@ typedef void(^ProgressBlock)(NSProgress *);
 }
 
 // 取消
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (void)invalidateSessionCancelingTasks:(BOOL)cancelPendingTasks {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (cancelPendingTasks) {
@@ -411,6 +426,7 @@ typedef void(^ProgressBlock)(NSProgress *);
         [downloadLock unlock];
     });
 }
+#pragma clang diagnostic pop
 
 #pragma mark - Download
 
@@ -479,10 +495,6 @@ typedef void(^ProgressBlock)(NSProgress *);
     [self p_cacheDownloadTask:task withURLString:originURL];
     [self p_cacheRequest:request withTask:task];
 }
-
-
-#pragma mark - Resume Data
-
 
 
 #pragma mark - Private Helper
@@ -728,7 +740,7 @@ typedef void(^ProgressBlock)(NSProgress *);
 - (SGSBaseRequest *)p_popRequestWithTask:(NSURLSessionTask *)task {
     if (task == nil) return nil;
     
-    NSString *key = [NSString stringWithFormat:@"%u", task.taskIdentifier];
+    NSString *key = @(task.taskIdentifier).description;
     NSLock *lock = self.requestLock;
     NSMutableDictionary *requestsRecord = self.requestsRecord;
     SGSBaseRequest *request = nil;
@@ -745,7 +757,7 @@ typedef void(^ProgressBlock)(NSProgress *);
 - (SGSBaseRequest *)p_requestWithTask:(NSURLSessionTask *)task {
     if (task == nil) return nil;
     
-    NSString *key = [NSString stringWithFormat:@"%u", task.taskIdentifier];
+    NSString *key = @(task.taskIdentifier).description;
     NSLock *lock = self.requestLock;
     [lock lock];
     SGSBaseRequest *request =  self.requestsRecord[key];
@@ -757,7 +769,7 @@ typedef void(^ProgressBlock)(NSProgress *);
 /// 缓存请求
 - (void)p_cacheRequest:(SGSBaseRequest *)request withTask:(NSURLSessionTask *)task {
     if (task != nil) {
-        NSString *key = [NSString stringWithFormat:@"%u", task.taskIdentifier];
+        NSString *key = @(task.taskIdentifier).description;
         NSLock *lock = self.requestLock;
         [lock lock];
         self.requestsRecord[key] = request;
@@ -768,7 +780,7 @@ typedef void(^ProgressBlock)(NSProgress *);
 /// 移除请求
 - (void)p_removeRequestWithTask:(NSURLSessionTask *)task {
     if (task != nil) {
-        NSString *key = [NSString stringWithFormat:@"%u", task.taskIdentifier];
+        NSString *key = @(task.taskIdentifier).description;
         NSLock *lock = self.requestLock;
         [lock lock];
         [self.requestsRecord removeObjectForKey:key];

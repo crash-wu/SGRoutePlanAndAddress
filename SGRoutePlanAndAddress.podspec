@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SGRoutePlanAndAddress'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = ' 数码地名地址搜索，周边搜索，公交站点搜索，公交路线搜索，公交站点坐标搜索，公交路线坐标搜索，驾车路线搜索'
 
 # This description is used to generate tags and improve search results.

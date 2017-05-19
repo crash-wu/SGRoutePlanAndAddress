@@ -19,10 +19,10 @@ PODS:
     - SGSHTTPModule
     - SVProgressHUD
     - YYModel
-  - SGSHTTPModule (0.4.1):
+  - SGSHTTPModule (0.5.0):
     - AFNetworking (~> 3.1.0)
-  - SGTileLayer (0.0.4)
-  - SVProgressHUD (2.0.3)
+  - SGTileLayer (0.0.5)
+  - SVProgressHUD (2.1.2)
   - YYModel (1.0.4)
 
 DEPENDENCIES:
@@ -38,11 +38,11 @@ SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   SGRoutePlanAndAddress: 160981d9173731b0de35dd11df16bfe8662c3763
-  SGSHTTPModule: d3df3056c464f43a778cfcf0ec74c12dda7d5223
-  SGTileLayer: 13d2b0b0af10b3b7671699292133fb481d3ce4eb
-  SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
+  SGSHTTPModule: 1e87b70fa2ba6f648f8b0ae3f0129ff15726250d
+  SGTileLayer: eb0df7ee5b1efc3fbd70d2e4e99bbe95836ff626
+  SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: f48b0ded1c6bb159987f0063eedcd72cffa06749
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.2.0.beta.1

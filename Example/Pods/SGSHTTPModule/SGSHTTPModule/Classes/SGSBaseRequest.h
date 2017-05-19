@@ -6,7 +6,6 @@
  @author Created by Lee on 16/8/12.
  
  @copyright 2016年 SouthGIS. All rights reserved.
- 
  */
 
 #import <Foundation/Foundation.h>
@@ -18,9 +17,11 @@
 #endif
 
 #import "SGSRequestDelegate.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol SGSResponseObjectSerializable;
 @protocol SGSResponseCollectionSerializable;
-
 
 /*!
  *  @abstract HTTP 请求方法，这里仅包含 `AFNetworking` 支持的6种方式
@@ -63,9 +64,6 @@ typedef NS_ENUM(NSInteger, SGSRequestPriority) {
     SGSRequestPriorityHigh    = 1,  //! 高优先级
 };
 
-
-
-NS_ASSUME_NONNULL_BEGIN
 
 
 /*!
@@ -128,25 +126,261 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) SGSRequestPriority requestPriority;
 
 
+#pragma mark - 快捷初始化方法
+
+- (instancetype)initWithURLString:(nullable NSString *)urlString;
+- (instancetype)initWithURLString:(nullable NSString *)urlString parameters:(nullable id)parameters;
+- (instancetype)initWithURLString:(nullable NSString *)urlString relativeToURLString:(nullable NSString *)baseURLString parameters:(nullable id)parameters;
+
+
+#pragma mark - 请求参数
+///-----------------------------------------------------------------------------
+/// @name 子类可以重写以下参数来指定不同的网络请求
+///-----------------------------------------------------------------------------
+
+
+#pragma mark - 请求方法
+
+/*!
+ *  @abstract HTTP请求方法，默认为 `GET` 请求
+ *
+ *  @return 请求方法
+ *
+ *  @see `SGSRequestMethod`
+ */
+@property (nonatomic, assign) SGSRequestMethod requestMethod;
+
+
+#pragma mark - 请求参数 - URL
+
+/*!
+ *  @abstract 请求序列化类型，默认为 `SGSRequestSerializerTypeForm`
+ *
+ *  @return 请求序列化类型
+ *
+ *  @see `SGSRequestSerializerType`
+ */
+@property (nonatomic, assign) SGSRequestSerializerType requestSerializerType;
+
+
+/*!
+ *  @abstract 请求基础URL字符串，例如：http://192.186.10.10/ ，默认为 `nil`
+ *
+ *  @discussion 字符串需遵守 URL 编码规则，不允许有中文字符
+ *
+ *  @return 请求基础URL字符串
+ */
+@property (nullable, nonatomic, copy) NSString *baseURL;
+
+
+/*!
+ *  @abstract 请求地址字符串，默认为 `nil`
+ *
+ *  @discussion 字符串需遵守 URL 编码规则，不允许有中文字符
+ *
+ *  @return 请求地址字符串
+ */
+@property (nullable, nonatomic, copy) NSString *requestURL;
+
+
+/*!
+ *  @abstract 请求的参数列表，默认为 `nil`
+ *
+ *  @return 请求参数列表
+ */
+@property (nullable, nonatomic, strong) id requestParameters;
+
+
+
+#pragma mark - 请求参数 - NSMutableURLRequest Property
+
+/*!
+ *  @abstract NSURLRequest 缓存策略，默认为 `NSURLRequestUseProtocolCachePolicy`
+ *
+ *  @return NSURLRequest 缓存策略
+ *
+ *  @see NSMutableURLRequest `cachePolicy` 属性
+ */
+@property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
+
+/*!
+ *  @abstract 请求的连接超时时长，单位为: *秒* ，默认为60秒
+ *
+ *  @return 请求超时时长
+ *
+ *  @see NSMutableURLRequest `requestTimeout` 属性
+ */
+@property (nonatomic, assign) NSTimeInterval requestTimeout;
+
+
+/*!
+ *  @abstract 网络服务类型，默认为 `NSURLNetworkServiceTypeDefault`
+ *
+ *  @return 网络服务类型
+ *
+ *  @see NSMutableURLRequest `networkServiceType` 属性
+ */
+@property (nonatomic, assign) NSURLRequestNetworkServiceType networkServiceType;
+
+
+/*!
+ *  @abstract 是否允许蜂窝网络传输数据，默认为 `YES`
+ *
+ *  @return `YES` 允许蜂窝网络传输； `NO` 不允许蜂窝网络传输，仅在 WiFi 环境下传输数据
+ *
+ *  @see NSMutableURLRequest `allowsCellularAccess` 属性
+ */
+@property (nonatomic, assign) BOOL allowsCellularAccess;
+
+
+/*!
+ *  @abstract 是否允许处理 cookies 数据，默认为 `YES`
+ *
+ *  @return `YES` 允许处理； `NO` 不允许保存 cookies
+ *
+ *  @see NSMutableURLRequest (NSMutableHTTPURLRequest)  `HTTPShouldHandleCookies` 属性
+ */
+@property (nonatomic, assign) BOOL HTTPShouldHandleCookies;
+
+
+/*!
+ *  @abstract 是否等待之前的响应，默认为 `NO`
+ *
+ *  @return `YES` 等待； `NO` 不等待
+ *
+ *  @see NSMutableURLRequest (NSMutableHTTPURLRequest)  `HTTPShouldUsePipelining` 属性
+ */
+@property (nonatomic, assign) BOOL HTTPShouldUsePipelining;
+
+
+#pragma mark - 请求参数 - HTTP Request Headers
+
+/*!
+ *  @abstract 需要认证的 HTTP 请求头的用户名（内部默认进行 Base-64 编码），默认为 `nil`
+ *
+ *  @return 用户名字符串
+ */
+@property (nullable, nonatomic, copy) NSString *authorizationUsername;
+
+/*!
+ *  @abstract 需要认证的 HTTP 请求头的密码（内部默认进行 Base-64 编码），默认为 `nil`
+ *
+ *  @return 密码字符串
+ */
+@property (nullable, nonatomic, copy) NSString *authorizationPassword;
+
+
+/*!
+ *  @abstract 请求报头自定义参数，默认为拼接 If-Modified-Since 和 If-None-Match
+ *
+ *  @return 请求报头参数字典
+ */
+@property (nullable, nonatomic, strong) NSDictionary<NSString *, NSString *> *requestHeaders;
+
+
+
+#pragma mark - 请求参数 - customURLRequest
+
+/*!
+ *  @abstract 使用自定义的URLRequest发起请求，默认为 `nil`
+ *
+ *  @discussion 如果该方法返回非 `nil` 对象，将忽略以下参数：
+ *      - requestSerializerType
+ *      - baseURL
+ *      - requestURL
+ *      - requestParameters
+ *      - requestHeaders
+ *      - cachePolicy
+ *      - requestTimeout
+ *      - networkServiceType
+ *      - allowsCellularAccess
+ *      - HTTPShouldHandleCookies
+ *      - HTTPShouldUsePipelining
+ *      - requestMethod
+ *      - authorizationUsername
+ *      - authorizationPassword
+ *      - requestHeaders
+ *      - constructingBodyBlock
+ */
+@property (nullable, nonatomic, strong) NSURLRequest *customURLRequest;
+
+
+
+#pragma mark - 请求参数 - Upload
+
+/*!
+ *  @abstract 拼接上传表单数据的Block，默认为 `nil`
+ */
+@property (nullable, nonatomic, copy) void (^constructingBodyBlock)(id<AFMultipartFormData> formData);
+
+
+
+#pragma mark - 请求参数 - Download
+
+
+/*!
+ *  @abstract 下载完毕后需要保存的本地路径
+ *
+ *  @discussion 只有调用 `-downloadWithCompletionSuccess:failure:` 或 `-startDownload` 才会生效，
+ *      在调用该闭包的同时，会根据 `-removeAlreadyExistsFileWhenDownloadSuccess` 判断是否要先删除已存在的同名文件再进行保存
+ *
+ *      默认返回： [SGSHTTPConfig sharedInstance].defaultDownloadsDirectory/response.suggestedFilename
+ */
+@property (null_resettable, nonatomic, copy) NSURL * (^downloadTargetPath)(NSURL *location, NSURLResponse *response);
+
+
+/*!
+ *  @abstract 下载是否忽略断点数据，默认为NO
+ *
+ *  @return 返回 `YES` 将忽略断点数据，始终发起新的下载请求；返回 `NO` 请求前判断如果有断点数据，优先进行断点续传
+ */
+@property (nonatomic, assign) BOOL ignoreResumeData;
+
+
+
+#pragma mark - 请求参数 - Response
+
+
+/*!
+ *  @abstract 可序列化的响应对象类型，默认为 `nil`
+ *
+ *  @return 可序列化的响应对象类
+ */
+@property (nullable, nonatomic, strong) Class<SGSResponseObjectSerializable> responseObjectClass;
+
+
+/*!
+ *  @abstract 可序列化的响应对象集合类型，默认为 `nil`
+ *
+ *  @return 可序列化的对象集合类
+ */
+@property (nullable, nonatomic, strong) Class<SGSResponseCollectionSerializable> responseObjectArrayClass;
+
+
+
 #pragma mark - 请求过程
 ///-----------------------------------------------------------------------------
 /// @name 请求过程
 ///-----------------------------------------------------------------------------
+
 
 /*!
  *  @abstract 请求成功回调闭包
  */
 @property (nullable, nonatomic, copy) void (^successCompletionBlock)(__kindof SGSBaseRequest *request);
 
+
 /*!
  *  @abstract 请求失败回调闭包
  */
 @property (nullable, nonatomic, copy) void (^failureCompletionBlock)(__kindof SGSBaseRequest *request);
 
+
 /*!
  *  @abstract 即将开始请求回调闭包
  */
 @property (nullable, nonatomic, copy) void (^requestWillStartBlock)(__kindof SGSBaseRequest *request);
+
 
 /*!
  *  @abstract 即将暂停回调闭包
@@ -155,12 +389,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nullable, nonatomic, copy) void (^requestWillSuspendBlock)(__kindof SGSBaseRequest *request);
 
+
 /*!
  *  @abstract 已经暂停回调闭包
  *
  *  @discussion 只有调用 `-suspend` 方法才会触发
  */
 @property (nullable, nonatomic, copy) void (^requestDidSuspendBlock)(__kindof SGSBaseRequest *request);
+
 
 /*!
  *  @abstract 即将停止请求回调闭包
@@ -174,6 +410,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nullable, nonatomic, copy) void (^requestWillStopBlock)(__kindof SGSBaseRequest *request);
 
+
 /*!
  *  @abstract 已经停止请求回调闭包
  *
@@ -181,10 +418,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nullable, nonatomic, copy) void (^requestDidStopBlock)(__kindof SGSBaseRequest *request);
 
+
 /*!
  *  @abstract 请求进度回调闭包，包括下载进度和上传进度
  */
 @property (nullable, nonatomic, copy) void (^progressBlock)(__kindof SGSBaseRequest *request, NSProgress *progress);
+
+
 
 #pragma mark - 响应
 ///-----------------------------------------------------------------------------
@@ -198,12 +438,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nullable, nonatomic, strong) NSHTTPURLResponse *response;
 
+
 /*!
  *  @abstract 请求响应的原始数据
  *
  *  @discussion 当响应码为 `204` 或请求失败时可能为 `nil`
  */
 @property (nullable, nonatomic, strong) NSData *responseData;
+
 
 /*!
  *  @abstract 请求错误
@@ -212,6 +454,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nullable, nonatomic, strong) NSError *error;
 
+
 /*!
  *  @abstract 响应字符串
  *
@@ -219,12 +462,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nullable, nonatomic, copy  , readonly) NSString *responseString;
 
+
 /*!
  *  @abstract 响应JSON数据
  *
  *  @discussion 默认根据 `responseData` 解析，可通过重写该属性的 getter 方法自定义解析
  */
 @property (nullable, nonatomic, strong, readonly) id responseJSON;
+
 
 /*!
  *  @abstract 响应模型对象，响应数据转为模型对象的便捷获取方法
@@ -235,6 +480,7 @@ NS_ASSUME_NONNULL_BEGIN
  *      可通过重写该属性的 getter 方法自定义解析
  */
 @property (nullable, nonatomic, strong, readonly) id<SGSResponseObjectSerializable> responseObject;
+
 
 /*!
  *  @abstract 响应对象数组
@@ -247,6 +493,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  默认根据 `responseJSON` 调用该协议的方法序列化为对象，可通过重写该属性的 getter 方法自定义解析
  */
 @property (nullable, nonatomic, strong, readonly) NSArray<id<SGSResponseObjectSerializable>> *responseObjectArray;
+
 
 
 #pragma mark - 操作方法
@@ -267,6 +514,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)startWithCompletionSuccess:(nullable void (^)(__kindof SGSBaseRequest *request))success
                            failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
 
+
 /*!
  *  @abstract 开始请求
  *
@@ -283,6 +531,7 @@ NS_ASSUME_NONNULL_BEGIN
                         success:(nullable void (^)(__kindof SGSBaseRequest *request))success
                         failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
 
+
 /*!
  *  @abstract 下载数据，支持断点续传
  *
@@ -294,6 +543,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)downloadWithCompletionSuccess:(nullable void (^)(__kindof SGSBaseRequest *request))success
                               failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
+
 
 /*!
  *  @abstract 下载数据，支持断点续传
@@ -342,6 +592,7 @@ NS_ASSUME_NONNULL_BEGIN
                            success:(nullable void (^)(__kindof SGSBaseRequest *request))success
                            failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
 
+
 /*!
  *  @abstract 上传文件
  *
@@ -354,6 +605,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)uploadWithFile:(NSURL *)fileURL
                success:(nullable void (^)(__kindof SGSBaseRequest *request))success
                failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
+
 
 /*!
  *  @abstract 上传文件
@@ -368,6 +620,7 @@ NS_ASSUME_NONNULL_BEGIN
                          success:(nullable void (^)(__kindof SGSBaseRequest *request))success
                          failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
 
+
 /*!
  *  @abstract 上传数据
  *
@@ -380,6 +633,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)uploadWithData:(nullable NSData *)bodyData
                success:(nullable void (^)(__kindof SGSBaseRequest *request))success
                failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
+
 
 /*!
  *  @abstract 上传数据
@@ -394,12 +648,14 @@ NS_ASSUME_NONNULL_BEGIN
                          success:(nullable void (^)(__kindof SGSBaseRequest *request))success
                          failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
 
+
 /*!
  *  @abstract 开始请求
  *
  *  @discussion 默认使用 defaultSessionConfiguration 初始化的 AFURLSessionManager 单例
  */
 - (void)start;
+
 
 /*!
  *  @abstract 开始请求
@@ -408,12 +664,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)startWithSessionManager:(nullable AFURLSessionManager *)manager;
 
+
 /*!
  *  @abstract 开始下载，支持断点续传
  *
  *  @discussion 默认使用 defaultSessionConfiguration 初始化的 AFURLSessionManager 单例
  */
 - (void)startDownload;
+
 
 /*!
  *  @abstract 开始下载，支持断点续传
@@ -427,6 +685,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)startDownloadWithSessionManager:(nullable AFURLSessionManager *)manager;
 
+
 /*!
  *  @abstract 开始上传文件
  *
@@ -435,6 +694,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param fileURL 待上传文件的地址
  */
 - (void)startUploadWithFile:(NSURL *)fileURL;
+
 
 /*!
  *  @abstract 开始上传文件
@@ -445,6 +705,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)startUploadWithSessionManager:(nullable AFURLSessionManager *)manager
                              fromFile:(NSURL *)fileURL;
 
+
 /*!
  *  @abstract 开始上传数据
  *
@@ -453,6 +714,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param bodyData 待上传的数据
  */
 - (void)startUploadWithData:(nullable NSData *)bodyData;
+
 
 /*!
  *  @abstract 开始上传数据
@@ -463,20 +725,24 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)startUploadWithSessionManager:(nullable AFURLSessionManager *)manager
                              fromData:(nullable NSData *)bodyData;
 
+
 /*!
  *  @abstract 继续执行请求
  */
 - (void)resume;
+
 
 /*!
  *  @abstract 暂停请求
  */
 - (void)suspend;
 
+
 /*!
  *  @abstract 主动停止请求
  */
 - (void)stop;
+
 
 /*!
  *  @abstract 设置请求完毕回调block
@@ -487,10 +753,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setCompletionBlockWithSuccess:(nullable void (^)(__kindof SGSBaseRequest *request))success
                               failure:(nullable void (^)(__kindof SGSBaseRequest *request))failure;
 
+
 /*!
  *  @abstract 把所有block属性置为nil来打破循环引用
  */
 - (void)clearBlock;
+
 
 /*!
  *  @abstract 用于检查Status Code是否正常
@@ -498,6 +766,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 响应码
  */
 - (BOOL)statusCodeValidator;
+
 
 /*!
  *  @abstract 请求完毕的回调过滤，如果子类不重写，将不做任何处理
@@ -511,226 +780,6 @@ NS_ASSUME_NONNULL_BEGIN
  *      因此可以通过重写该方法验证和过滤数据
  */
 - (void)requestCompleteFilter;
-
-
-#pragma mark - 请求参数
-///-----------------------------------------------------------------------------
-/// @name 子类通过重写以下参数方法来指定不同的网络请求
-///-----------------------------------------------------------------------------
-
-
-#pragma mark - 请求方法
-
-/*!
- *  @abstract HTTP请求方法，如果子类不重写，默认为 `GET` 请求
- *
- *  @return 请求方法
- *
- *  @see `SGSRequestMethod`
- */
-- (SGSRequestMethod)requestMethod;
-
-
-#pragma mark - 请求参数 - URL
-
-/*!
- *  @abstract 请求序列化类型，如果子类不重写，默认为 `SGSRequestSerializerTypeForm`
- *
- *  @return 请求序列化类型 
- *  
- *  @see `SGSRequestSerializerType`
- */
-- (SGSRequestSerializerType)requestSerializerType;
-
-
-/*!
- *  @abstract 请求基础URL字符串，例如：http://192.186.10.10/ ，如果子类不重写，默认返回 `nil`
- *
- *  @discussion 字符串需遵守 URL 编码规则，不允许有中文字符
- *
- *  @return 请求基础URL字符串
- */
-- (nullable NSString *)baseURL;
-
-
-/*!
- *  @abstract 请求地址字符串，如果子类不重写，默认返回 @""
- *
- *  @discussion 字符串需遵守 URL 编码规则，不允许有中文字符
- *
- *  @return 请求地址字符串
- */
-- (NSString *)requestURL;
-
-
-/*!
- *  @abstract 请求的参数列表，如果子类不重写，默认返回 `nil`
- *
- *  @return 请求参数列表
- */
-- (nullable id)requestParameters;
-
-
-
-#pragma mark - 请求参数 - NSMutableURLRequest Property
-
-/*!
- *  @abstract NSURLRequest 缓存策略，如果子类不重写，默认返回 `NSURLRequestUseProtocolCachePolicy`
- *
- *  @return NSURLRequest 缓存策略
- *
- *  @see NSMutableURLRequest `cachePolicy` 属性
- */
-- (NSURLRequestCachePolicy)cachePolicy;
-
-
-/*!
- *  @abstract 请求的连接超时时长，单位为: *秒* ，如果子类不重写，默认为60秒
- *
- *  @return 请求超时时长
- *
- *  @see NSMutableURLRequest `requestTimeout` 属性
- */
-- (NSTimeInterval)requestTimeout;
-
-
-/*!
- *  @abstract 网络服务类型，如果子类不重写，默认返回 `NSURLNetworkServiceTypeDefault`
- *
- *  @return 网络服务类型
- *
- *  @see NSMutableURLRequest `networkServiceType` 属性
- */
-- (NSURLRequestNetworkServiceType)networkServiceType;
-
-
-/*!
- *  @abstract 是否允许蜂窝网络传输数据，如果子类不重写，默认返回 `YES`
- *
- *  @return `YES` 允许蜂窝网络传输； `NO` 不允许蜂窝网络传输，仅在 WiFi 环境下传输数据
- *
- *  @see NSMutableURLRequest `allowsCellularAccess` 属性
- */
-- (BOOL)allowsCellularAccess;
-
-
-/*!
- *  @abstract 是否允许处理 cookies 数据，如果子类不重写，默认返回 `YES`
- *
- *  @return `YES` 允许处理； `NO` 不允许保存 cookies
- *
- *  @see NSMutableURLRequest (NSMutableHTTPURLRequest)  `HTTPShouldHandleCookies` 属性
- */
-- (BOOL)HTTPShouldHandleCookies;
-
-
-/*!
- *  @abstract 是否等待之前的响应，如果子类不重写，默认返回 `NO`
- *
- *  @return `YES` 等待； `NO` 不等待
- *
- *  @see NSMutableURLRequest (NSMutableHTTPURLRequest)  `HTTPShouldUsePipelining` 属性
- */
-- (BOOL)HTTPShouldUsePipelining;
-
-
-#pragma mark - 请求参数 - HTTP Request Headers
-
-/*!
- *  @abstract 需要认证的 HTTP 请求头的用户名（内部默认进行 Base-64 编码），如果子类不重写，默认返回 `nil`
- *
- *  @return 用户名字符串
- */
-- (nullable NSString *)authorizationUsername;
-
-
-/*!
- *  @abstract 需要认证的 HTTP 请求头的密码（内部默认进行 Base-64 编码），如果子类不重写，默认返回 `nil`
- *
- *  @return 密码字符串
- */
-- (nullable NSString *)authorizationPassword;
-
-
-/*!
- *  @abstract 请求报头自定义参数，如果子类不重写，默认返回 `nil`
- *
- *  @return 请求报头参数字典
- */
-- (nullable NSDictionary<NSString *, NSString *> *)requestHeaders;
-
-
-#pragma mark - 请求参数 - customURLRequest
-
-/*!
- *  @abstract 使用自定义的URLRequest发起请求，如果子类不重写，默认返回 `nil`
- *
- *  @discussion 如果该方法返回非 `nil` 对象，将忽略以下参数：
- *      - requestSerializerType 
- *      - baseURL
- *      - requestURL
- *      - requestParameters
- *      - requestHeaders
- *      - cachePolicy
- *      - requestTimeout
- *      - networkServiceType
- *      - allowsCellularAccess
- *      - HTTPShouldHandleCookies
- *      - HTTPShouldUsePipelining
- *      - requestMethod
- *      - authorizationUsername
- *      - authorizationPassword
- *      - requestHeaders
- *      - constructingBodyBlock
- */
-- (nullable NSURLRequest *)customURLRequest;
-
-
-#pragma mark - 请求参数 - Upload
-
-/*!
- *  @abstract 拼接上传表单数据的Block，默认为 `nil`
- */
-@property (nullable, nonatomic, copy) void (^constructingBodyBlock)(id<AFMultipartFormData> formData);
-
-
-#pragma mark - 请求参数 - Download
-
-/*!
- *  @abstract 下载完毕后需要保存的本地路径
- *
- *  @discussion 只有调用 `-downloadWithCompletionSuccess:failure:` 或 `-startDownload` 才会生效，
- *      在调用该闭包的同时，会根据 `-removeAlreadyExistsFileWhenDownloadSuccess` 判断是否要先删除已存在的同名文件再进行保存
- *
- *      如果子类不重写，默认返回： [SGSHTTPConfig sharedInstance].downloadDataTempDirectory/response.suggestedFilename
- */
-- (nullable NSURL * (^)(NSURL *location, NSURLResponse *response))downloadTargetPath;
-
-
-/*!
- *  @abstract 下载是否忽略断点数据，如果子类不重写，默认返回NO
- *
- *  @return 返回 `YES` 将忽略断点数据，始终发起新的下载请求；返回 `NO` 请求前判断如果有断点数据，优先进行断点续传
- */
-- (BOOL)ignoreResumeData;
-
-
-#pragma mark - 请求参数 - Response
-
-/*!
- *  @abstract 可序列化的响应对象类型，如果子类不重写，默认返回 `nil`
- *
- *  @return 可序列化的响应对象类
- */
-- (nullable Class<SGSResponseObjectSerializable>)responseObjectClass;
-
-
-/*!
- *  @abstract 可序列化的响应对象集合类型，如果子类不重写，默认返回 `nil`
- *
- *  @return 可序列化的对象集合类
- */
-- (nullable Class<SGSResponseCollectionSerializable>)responseObjectArrayClass;
 
 @end
 

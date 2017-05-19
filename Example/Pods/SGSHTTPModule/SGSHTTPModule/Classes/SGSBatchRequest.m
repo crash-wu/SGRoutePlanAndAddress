@@ -4,7 +4,6 @@
  @author Created by Lee on 16/8/15.
  
  @copyright 2016年 SouthGIS. All rights reserved.
- 
  */
 
 #import "SGSBatchRequest.h"

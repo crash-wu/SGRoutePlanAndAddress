@@ -4,7 +4,6 @@
  @author Created by Lee on 16/8/12.
  
  @copyright 2016年 SouthGIS. All rights reserved.
- 
  */
 
 #import "SGSBaseRequest.h"
@@ -14,7 +13,6 @@
 #import "SGSResponseSerializable.h"
 #import "AFURLSessionManager+SGS.h"
 
-#define kLazy(object, assignment) ((object) = (object) ?: (assignment))
 
 static const int kManagerKey;
 
@@ -25,16 +23,30 @@ typedef NS_ENUM(NSInteger, kRequestType) {
     kRequestTypeUploadData,
 };
 
-AFURLSessionManager * kSharedManager() {
-    static AFURLSessionManager *manager;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    });
+
+@interface NSURL (SGSHTTPModule)
+- (instancetype)initWithString:(NSString *)URLString relativeToURLString:(NSString *)baseURLString;
+@end
+
+@implementation NSURL (SGSHTTPModule)
+- (instancetype)initWithString:(NSString *)URLString relativeToURLString:(NSString *)baseURLString {
+    if (URLString.length == 0) return nil;
     
-    return manager;
+    NSURL *baseURL = nil;
+    if (baseURLString.length > 0) {
+        if (![baseURLString hasSuffix:@"/"]) {
+            baseURLString = [baseURLString stringByAppendingString:@"/"];
+        }
+        baseURL = [NSURL URLWithString:baseURLString];
+    }
+    
+    if ([URLString hasPrefix:@"/"]) {
+        URLString = [URLString substringFromIndex:1];
+    }
+    
+    return [self initWithString:URLString relativeToURL:baseURL];
 }
+@end
 
 
 #pragma mark - SGSBaseRequest
@@ -47,6 +59,49 @@ AFURLSessionManager * kSharedManager() {
 @end
 
 @implementation SGSBaseRequest
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithURLString:(NSString *)urlString {
+    return [self initWithURLString:urlString relativeToURLString:nil parameters:nil];
+}
+
+- (instancetype)initWithURLString:(NSString *)urlString parameters:(id)parameters {
+    return [self initWithURLString:urlString relativeToURLString:nil parameters:parameters];
+}
+
+- (instancetype)initWithURLString:(NSString *)urlString relativeToURLString:(NSString *)baseURLString parameters:(id)parameters {
+    self = [super init];
+    if (self) {
+        _requestURL = urlString;
+        _baseURL = baseURLString;
+        _requestParameters = parameters;
+        [self commonInit];
+    }
+    return self;
+}
+
+/* 
+ 由于没有指定初始化方法，所以这里使用 -commontInit初始化参数，可以分别在 -init 方法和 
+ -initWithURLString:relativeToURLString:parameters: 中保证相同参数的初始化
+ */
+- (void)commonInit {
+    _requestMethod = SGSRequestMethodGet;
+    _requestSerializerType = SGSRequestSerializerTypeForm;
+    _cachePolicy = NSURLRequestUseProtocolCachePolicy;
+    _requestTimeout = 60;
+    _networkServiceType = NSURLNetworkServiceTypeDefault;
+    _allowsCellularAccess = YES;
+    _HTTPShouldHandleCookies = YES;
+    _HTTPShouldUsePipelining = NO;
+    _ignoreResumeData = NO;
+}
 
 // 开始请求
 - (void)startWithCompletionSuccess:(void (^)(__kindof SGSBaseRequest * _Nonnull))success
@@ -162,7 +217,7 @@ AFURLSessionManager * kSharedManager() {
                      uploadBody:(id)body
 {
     if (manager == nil) {
-        manager = kSharedManager();
+        manager = [AFURLSessionManager defaultSessionManager];
     }
     
     if (self.requestWillStartBlock != nil) {
@@ -303,76 +358,124 @@ AFURLSessionManager * kSharedManager() {
 - (void)requestCompleteFilter {
 }
 
+#pragma mark - Accessors
 
-#pragma mark - 请求参数
-
-// 请求方法
-- (SGSRequestMethod)requestMethod {
-    return SGSRequestMethodGet;
+- (void)setTask:(NSURLSessionTask *)task {
+    _task = task;
+    
+    if ([_task respondsToSelector:@selector(setPriority:)]) {
+        switch (_requestPriority) {
+            case SGSRequestPriorityDefault:
+                _task.priority = 0.5;
+                break;
+                
+            case SGSRequestPriorityLow:
+                _task.priority = 0.25;
+                break;
+                
+            case SGSRequestPriorityHigh:
+                _task.priority = 0.75;
+                break;
+        }
+    }
 }
 
-// 请求序列化形式
-- (SGSRequestSerializerType)requestSerializerType {
-    return SGSRequestSerializerTypeForm;
+- (NSURLSessionTaskState)state {
+    if (self.task == nil) {
+        return NSURLSessionTaskStateSuspended;
+    }
+    
+    return self.task.state;
 }
 
-// 请求基础URL
-- (NSString *)baseURL {
-    return nil;
+- (NSURLRequest *)originalRequest {
+    return self.task.originalRequest;
 }
 
-// 请求URL
-- (NSString *)requestURL {
-    return @"";
+- (NSURLRequest *)currentRequest {
+    return self.task.currentRequest;
 }
 
-// 请求参数
-- (id)requestParameters {
-    return nil;
+- (NSString *)originURLString {
+    NSString *detailURLString = self.requestURL;
+    
+    if ([detailURLString hasPrefix:@"http"]) {
+        return detailURLString;
+    }
+    
+    NSString *baseURLString = nil;
+    
+    if (self.baseURL.length > 0) {
+        baseURLString = self.baseURL;
+    } else {
+        baseURLString = [SGSHTTPConfig sharedInstance].baseURL;
+    }
+    
+    return [[NSURL alloc] initWithString:detailURLString relativeToURLString:baseURLString].absoluteString;
 }
 
-// 缓存策略
-- (NSURLRequestCachePolicy)cachePolicy {
-    return NSURLRequestUseProtocolCachePolicy;
+
+- (void)setResponseData:(NSData *)responseData {
+    _responseData = responseData;
+    
+    _responseString      = nil;
+    _responseJSON        = nil;
+    _responseObject      = nil;
+    _responseObjectArray = nil;
 }
 
-// 请求超时
-- (NSTimeInterval)requestTimeout {
-    return 60.0;
+- (NSString *)responseString {
+    if (_responseString == nil) {
+        if (self.responseData != nil) {
+            _responseString = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
+        }
+    }
+    return _responseString;
 }
 
-// 网络服务类型
-- (NSURLRequestNetworkServiceType)networkServiceType {
-    return NSURLNetworkServiceTypeDefault;
+- (id)responseJSON {
+    if (_responseJSON == nil) {
+        if (self.responseData.length != 0) {
+            _responseJSON = [NSJSONSerialization JSONObjectWithData:self.responseData options:NSJSONReadingAllowFragments error:nil];
+        }
+    }
+    return _responseJSON;
 }
 
-// 是否允许蜂窝网络传输
-- (BOOL)allowsCellularAccess {
-    return YES;
+
+- (id<SGSResponseObjectSerializable>)responseObject {
+    if (_responseObject == nil) {
+        if (self.responseJSON != nil) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-method-access"
+            Class<SGSResponseObjectSerializable> cls = [self responseObjectClass];
+            if ([cls respondsToSelector:@selector(objectSerializeWithResponseObject:)]) {
+                _responseObject = [cls objectSerializeWithResponseObject:self.responseJSON];
+            }
+#pragma clang diagnostic pop
+        }
+    }
+    return _responseObject;
 }
 
-// 是否允许 cookies
-- (BOOL)HTTPShouldHandleCookies {
-    return YES;
+- (NSArray<id<SGSResponseObjectSerializable>> *)responseObjectArray {
+    if (_responseObjectArray == nil) {
+        if (self.responseJSON != nil) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-method-access"
+            Class<SGSResponseCollectionSerializable> cls = [self responseObjectArrayClass];
+            if ([cls respondsToSelector:@selector(colletionSerializeWithResponseObject:)]) {
+                _responseObjectArray = [cls colletionSerializeWithResponseObject:self.responseJSON];
+            }
+#pragma clang diagnostic pop
+        }
+    }
+    return _responseObjectArray;
 }
 
-// 是否等待之前的响应
-- (BOOL)HTTPShouldUsePipelining {
-    return NO;
-}
-
-// 认证用户名
-- (NSString *)authorizationUsername {
-    return nil;
-}
-
-// 认证密码
-- (NSString *)authorizationPassword {
-    return nil;
-}
-
-// 请求头
 - (NSDictionary<NSString *, NSString *> *)requestHeaders {
+    if (_requestHeaders != nil) return _requestHeaders;
+    
     if (self.cachePolicy != NSURLRequestUseProtocolCachePolicy) return nil;
     
     NSURLRequest *request       = nil;
@@ -393,18 +496,10 @@ AFURLSessionManager * kSharedManager() {
     return header;
 }
 
-// 自定义请求
-- (NSURLRequest *)customURLRequest {
-    return nil;
-}
-
-// 多部件表单block
-- (void (^)(id<AFMultipartFormData> _Nonnull))constructingBodyBlock {
-    return nil;
-}
-
 // 下载完毕后的保存路径
 - (NSURL * _Nonnull (^)(NSURL * _Nonnull, NSURLResponse * _Nonnull))downloadTargetPath {
+    if (_downloadTargetPath != nil) return _downloadTargetPath;
+    
     return ^(NSURL * location, NSURLResponse * response) {
         
         NSString      *tempDir = [SGSHTTPConfig sharedInstance].defaultDownloadsDirectory;
@@ -428,123 +523,6 @@ AFURLSessionManager * kSharedManager() {
         
         return (createDirSuccess ? destination : location);
     };
-}
-
-// 是否忽略断点数据
-- (BOOL)ignoreResumeData {
-    return NO;
-}
-
-// 响应对象类型
-- (Class<SGSResponseObjectSerializable>)responseObjectClass {
-    return nil;
-}
-
-// 响应对象集合类型
-- (Class<SGSResponseCollectionSerializable>)responseObjectArrayClass {
-    return nil;
-}
-
-
-#pragma mark - getter & setter
-
-- (void)setTask:(NSURLSessionTask *)task {
-    _task = task;
-    
-    switch (_requestPriority) {
-        case SGSRequestPriorityDefault:
-            _task.priority = NSURLSessionTaskPriorityDefault;
-            break;
-            
-        case SGSRequestPriorityLow:
-            _task.priority = NSURLSessionTaskPriorityLow;
-            break;
-            
-        case SGSRequestPriorityHigh:
-            _task.priority = NSURLSessionTaskPriorityHigh;
-            break;
-    }
-}
-
-- (NSURLSessionTaskState)state {
-    if (self.task == nil) {
-        return NSURLSessionTaskStateSuspended;
-    }
-    
-    return self.task.state;
-}
-
-- (NSURLRequest *)originalRequest {
-    return self.task.originalRequest;
-}
-
-- (NSURLRequest *)currentRequest {
-    return self.task.currentRequest;
-}
-
-- (NSString *)originURLString {
-    NSString *detailURL = self.requestURL;
-    
-    if ([detailURL hasPrefix:@"http"]) {
-        return detailURL;
-    }
-    
-    NSString *baseUrl;
-    
-    if (self.baseURL.length > 0) {
-        baseUrl = self.baseURL;
-    } else {
-        baseUrl = [SGSHTTPConfig sharedInstance].baseURL;
-    }
-    
-    return [NSString stringWithFormat:@"%@%@", baseUrl, detailURL];
-}
-
-
-- (void)setResponseData:(NSData *)responseData {
-    _responseData = responseData;
-    
-    _responseString      = nil;
-    _responseJSON        = nil;
-    _responseObject      = nil;
-    _responseObjectArray = nil;
-}
-
-- (NSString *)responseString {
-    return kLazy(_responseString, {
-        if (self.responseData == nil) return nil;
-        
-        [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
-    });
-}
-
-- (id)responseJSON {
-    return kLazy(_responseJSON, {
-        if (self.responseData == nil || self.responseData.length == 0) return nil;
-        
-        [NSJSONSerialization JSONObjectWithData:self.responseData options:NSJSONReadingAllowFragments error:nil];
-    });
-}
-
-
-- (id<SGSResponseObjectSerializable>)responseObject {
-    return kLazy(_responseObject, {
-        if (self.responseJSON == nil) return nil;
-        Class<SGSResponseObjectSerializable> cls = [self responseObjectClass];
-        if (cls == nil) return nil;
-        
-        [cls objectSerializeWithResponseObject:self.responseJSON];
-    });
-}
-
-- (NSArray<id<SGSResponseObjectSerializable>> *)responseObjectArray {
-    return kLazy(_responseObjectArray, {
-        if (self.responseJSON == nil) return nil;
-        Class<SGSResponseCollectionSerializable> cls = [self responseObjectArrayClass];
-        if (cls == nil) return nil;
-        
-        [cls colletionSerializeWithResponseObject:self.responseJSON];
-    });
 }
 
 @end

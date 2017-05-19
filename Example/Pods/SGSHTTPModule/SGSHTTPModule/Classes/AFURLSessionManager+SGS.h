@@ -1,7 +1,7 @@
 /*!
  @header AFURLSessionManager+SGS.h
  
- @abstract
+ @abstract AFURLSessionManager 扩展
  
  @author Created by Lee on 16/9/20.
  
@@ -14,11 +14,21 @@
 #import "AFNetworking.h"
 #endif
 
-@class SGSBaseRequest;
-
 NS_ASSUME_NONNULL_BEGIN
 
+@class SGSBaseRequest;
+
 @interface AFURLSessionManager (SGS)
+
+/*!
+ *  @abstract 默认的会话管理
+ *
+ *  @discussion SessionConfiguration 使用 [NSURLSessionConfiguration defaultSessionConfiguration], 
+ *      responseSerializer 使用 [AFHTTPResponseSerializer serializer]
+ *
+ *  @return AFURLSessionManager 单例
+ */
++ (AFURLSessionManager *)defaultSessionManager;
 
 /*!
  *  @abstract 执行请求任务
@@ -37,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)executeDownload:(SGSBaseRequest *)request;
 
 /*!
- *  @brief 执行上传任务
+ *  @abstract 执行上传任务
  *
  *  @param request 上传任务
  *  @param fileURL 待上传的文件地址
@@ -45,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)executeUpload:(SGSBaseRequest *)request fromFile:(NSURL *)fileURL;
 
 /*!
- *  @brief 执行上传任务
+ *  @abstract 执行上传任务
  *
  *  @param request  上传任务
  *  @param bodyData 待上传的数据

@@ -1,1 +1,0 @@
-../../../SGSHTTPModule/SGSHTTPModule/Classes/AFHTTPSessionManager+SGS.h

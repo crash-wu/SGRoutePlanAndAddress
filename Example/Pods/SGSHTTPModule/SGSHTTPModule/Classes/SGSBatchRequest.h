@@ -6,7 +6,6 @@
  @author Created by Lee on 16/8/15.
  
  @copyright 2016年 SouthGIS. All rights reserved.
- 
  */
 
 #import <Foundation/Foundation.h>
@@ -17,10 +16,10 @@
 #import "AFNetworking.h"
 #endif
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SGSBaseRequest;
 @class SGSBatchRequest;
-
-NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SGSBatchRequestDelegate
 

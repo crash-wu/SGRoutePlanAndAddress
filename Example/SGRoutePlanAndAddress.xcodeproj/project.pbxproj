@@ -367,12 +367,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "SGRoutePlanAndAddress_Tests" */;
 			buildPhases = (
-				FFD9F095EBDE29EBBB7F285C /* [CP] Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				D5E6340A025F45CD1104741A /* [CP] Embed Pods Frameworks */,
-				1B59F0AA070203477BC13F5A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -394,6 +391,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "吴小星";
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = ESU935NVR6;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -451,21 +451,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1B59F0AA070203477BC13F5A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SGRoutePlanAndAddress_Tests/Pods-SGRoutePlanAndAddress_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		5DE2E0F9DD10D970801F0192 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -493,7 +478,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		D47A26F6A6CF87FC82C8ED34 /* [CP] Copy Pods Resources */ = {
@@ -509,36 +494,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SGRoutePlanAndAddress_Example/Pods-SGRoutePlanAndAddress_Example-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D5E6340A025F45CD1104741A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SGRoutePlanAndAddress_Tests/Pods-SGRoutePlanAndAddress_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FFD9F095EBDE29EBBB7F285C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -686,6 +641,7 @@
 			baseConfigurationReference = 9D8B136F69CD22F525D704CE /* Pods-SGRoutePlanAndAddress_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = ESU935NVR6;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SGRoutePlanAndAddress/SGRoutePlanAndAddress-Prefix.pch";
 				INFOPLIST_FILE = "SGRoutePlanAndAddress/SGRoutePlanAndAddress-Info.plist";
@@ -702,6 +658,7 @@
 			baseConfigurationReference = 8AB4C0F56C0C90AB5FD02598 /* Pods-SGRoutePlanAndAddress_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = ESU935NVR6;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SGRoutePlanAndAddress/SGRoutePlanAndAddress-Prefix.pch";
 				INFOPLIST_FILE = "SGRoutePlanAndAddress/SGRoutePlanAndAddress-Info.plist";

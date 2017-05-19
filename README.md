@@ -1,12 +1,12 @@
 # SGRoutePlanAndAddress
 
-[![CI Status](http://img.shields.io/travis/吴小星/SGRoutePlanAndAddress.svg?style=flat)](https://travis-ci.org/吴小星/SGRoutePlanAndAddress)
+[![CI Status](http://img.shields.io/travis/crash_wu/SGRoutePlanAndAddress.svg?style=flat)](https://travis-ci.org/crash_wu/SGRoutePlanAndAddress)
 [![Version](https://img.shields.io/cocoapods/v/SGRoutePlanAndAddress.svg?style=flat)](http://cocoapods.org/pods/SGRoutePlanAndAddress)
 [![License](https://img.shields.io/cocoapods/l/SGRoutePlanAndAddress.svg?style=flat)](http://cocoapods.org/pods/SGRoutePlanAndAddress)
 [![Platform](https://img.shields.io/cocoapods/p/SGRoutePlanAndAddress.svg?style=flat)](http://cocoapods.org/pods/SGRoutePlanAndAddress)
 
 ## Describe
-数码地名地址搜索，周边搜索，公交站点搜索，公交路线搜索，公交站点坐标搜索，公交路线坐标搜索，驾车路线搜索等功能
+地名地址搜索，周边搜索，公交站点搜索，公交路线搜索，公交站点坐标搜索，公交路线坐标搜索，驾车路线搜索等功能，高德驾车路线规划
 
 ## Example
 
@@ -246,6 +246,26 @@ To run the example project, clone the repo, and run `pod install` from the Examp
  *  @return
  */
 +(nonnull instancetype) sharedInstance;
+```
+
+### 高德驾车路线规划
+
+```
+/**
+ 单例
+ */
++(nonnull instancetype )sharedManager;
+
+/**
+ 高德地图路线规划
+ 
+ @param from 起点
+ @param to 终点
+ @param success 搜索成功
+ @param fail 搜索失败
+ */
+-(void)gdRoute:(AGSPoint *_Nonnull)from andTo:(AGSPoint *_Nonnull)to andSuccess:(nonnull void(^) (AGSMutablePolyline *_Nonnull polyline)  ) success andFail:(nonnull void(^) (NSError *_Nullable error)) fail;
+
 ```
 
 ###SGAddressModel

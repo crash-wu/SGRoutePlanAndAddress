@@ -22,6 +22,8 @@
 #import "SGGetBusStopLocationHandler.h"
 #import "SGRouteServiceHandler.h"
 #import "SGSurroundAddressServiceHandler.h"
+#import "GDRouteHandler.h"
+#import "GDPathListModel.h"
 
 
 #endif /* SGRoutePlanAndAddress_h */
